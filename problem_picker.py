@@ -23,6 +23,9 @@ def generateAlgebraicEq(n):
 def generateTrigEq(n):
     return generateProblems(n, equationText, trigEqMix)
 
+# helper function for getting factorizeEx in the same format as all the Eq functions
+def factorizeExEq():
+    return sympy.latex(factorizeEx())
 # write as many factorization problems ar specified by n
 def generateFactorizeEx(n):
-    return generateProblems(n, factorizeText, factorizeEx)
+    return generateProblems(n, factorizeText, factorizeExEq)
