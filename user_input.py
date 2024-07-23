@@ -1,9 +1,9 @@
-from problem_picker import generateAlgebraicEq, generateTrigEq, generateFactorizeEx
+from problem_picker import generateProblems
 from tex_generator import writeTex
 import os
 
 # generate the problems
-problems = generateFactorizeEx(2) + generateAlgebraicEq(4) + generateTrigEq(2)
+problems = generateProblems(2, "linear function") + generateProblems(4, "algebraic equation") + generateProblems(2, "trigonometric equation")
 
 # put it into LaTeX file
 writeTex(problems)

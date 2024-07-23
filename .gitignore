@@ -1,0 +1,5 @@
+*.pdf
+__pycache__/
+problem_set.tex
+my_input.py
+unfinished.py

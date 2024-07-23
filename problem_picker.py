@@ -1,31 +1,45 @@
 import random, sympy
-from tex_generator import equationText, factorizeText, drawGraphText
-from mathematics import algebraicEquation, trigEqMix, factorizeEx
+from tex_generator import equationText, factorizeText, drawGraphText, simplifyFracText
+import mathematics
 
 x, y = sympy.symbols('x y')
 
-# write n problems using known text and problem function
-def generateProblems(n, problemText, problemFunction):
+# write n problems of a set type
+def generateProblems(n, type):
+
+    # select function and accompanying text based on problem type
+    match type:
+        case "algebraic equation":
+            problemText = equationText
+            problemFunction = mathematics.algebraicEquation
+        case "trigonometric equation":
+            problemText = equationText
+            problemFunction = mathematics.trigEqMix
+        case "factorize":
+            problemText = factorizeText
+            problemFunction = mathematics.factorizeEx
+        case "linear function":
+            problemText = drawGraphText
+            problemFunction = mathematics.linearFunc
+        case "quadratic function":
+            problemText = drawGraphText
+            problemFunction = mathematics.quadraticFunc
+        case "hyperbola function":
+            problemText = drawGraphText
+            problemFunction = mathematics.hyperbolaFunc
+        case "trigonometric function":
+            problemText = drawGraphText
+            problemFunction = mathematics.trigFunc
+        case "simplify fraction":
+            problemText = simplifyFracText
+            problemFunction = mathematics.simplifyFracEx
+
     string = r"        \item " + problemText + "\n"
     string = string + r"    \begin{enumerate}" + "\n"
 
+    # write n number of problems
     for i in range(n):
         string = string + r"        \item $" + problemFunction() +"$" "\n"
 
     string = string + r"    \end{enumerate}" + "\n"
     return string
-
-# write as many algebraic equations as specified by n.
-def generateAlgebraicEq(n):
-    return generateProblems(n, equationText, algebraicEquation)
-
-# write as many trigonometric equations (generic or solved w general methods) as specified by n
-def generateTrigEq(n):
-    return generateProblems(n, equationText, trigEqMix)
-
-# helper function for getting factorizeEx in the same format as all the Eq functions
-def factorizeExEq():
-    return sympy.latex(factorizeEx())
-# write as many factorization problems ar specified by n
-def generateFactorizeEx(n):
-    return generateProblems(n, factorizeText, factorizeExEq)

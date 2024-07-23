@@ -66,7 +66,7 @@ def quadraticFunc():
     a = sign(random.randrange(1,6))
     b = sign(random.randrange(6))
     c = sign(random.randrange(6))
-    return "y = " + sympy.latex(a/k * x ** 2 + b * x + c)
+    return "y = " + sympy.latex(sympy.Rational(a, k) * x ** 2 + b * x + c)
 
 ############################### END ###############################
 
@@ -97,12 +97,13 @@ def cubeEx():
 def factorizeEx():
     k = random.randrange(3)
 
-    if k == 0:
-        return commonFacEx()
-    if k == 1:
-        return cubeEx()
-    if k== 2:
-        return groupingEx()
+    match k:
+        case 0:
+            return sympy.latex(commonFacEx())
+        case 1:
+            return sympy.latex(cubeEx())
+        case 2:
+            return sympy.latex(groupingEx())
 
 # equation of the form ax^4 + bx^2 + c = 0
 def substitution():
@@ -110,7 +111,7 @@ def substitution():
     a = sign(random.randrange(9))
     b = sign(random.randrange(9))
 
-    return sympy.expand((x ** 2 - a) * (x ** 2 - b))
+    return sympy.latex(sympy.expand((x ** 2 - a) * (x ** 2 - b)))
 
 # simple edge case where students would use graphs to solve the equation
 def graphEq():
@@ -119,12 +120,13 @@ def graphEq():
 
     # pick the type of edge case - sqrt(x), x^3 or x^4
     k = random.randrange(3)
-    if k == 0:
-        ex = x ** 3
-    if k == 1:
-        ex = sympy.sqrt(x)
-    if k == 2:
-        ex = x ** 4
+    match k:
+        case 0:
+            ex = x ** 3
+        case 1:
+            ex = sympy.sqrt(x)
+        case 2:
+            ex = x ** 4
 
     return sympy.latex(ex) + " = " + sympy.latex(a * x + b)
 
@@ -132,21 +134,49 @@ def graphEq():
 def algebraicEquation():
     k = random.randrange(3)
 
-    if k == 0:
-        return equify(sympy.latex(factorizeEx()))
-    if k == 1:
-        return equify(sympy.latex(substitution()))
-    if k == 2:
-        return graphEq()
+    match k:
+        case 0:
+            return equify(factorizeEx())
+        case 1:
+            return equify(substitution())
+        case 2:
+            return graphEq()
 
 # graph for algebraic fractions (hyperbola)
-def hyperbola():
+def hyperbolaFunc():
     k = sign(random.randrange(1,13))
     a = random.randrange(1,3)
     b = sign(random.randrange(6))
     c = sign(random.randrange(6))
     ex = "y = " + sympy.latex(k / (a * x - b) + c)
     return ex
+
+# generate one factor of an expression to be factorized
+def polynomialEx():
+    k = random.randrange(7)
+
+    match k:
+        case 0:
+            ex = sign(random.randrange(2,9))
+        case 1:
+            ex = x ** random.randrange(1,5)
+        case 2:
+            a = sign(random.randrange(1,5))
+            ex = x ** 2 - x * a + a ** 2
+        case 3:
+           a = sign(random.randrange(1,5))
+           ex = x ** 2 + a
+    if k > 3:
+        ex = sign(1) * x - sign(random.randrange(7))
+
+    return ex
+
+# generate a fraction in such a way that it can be simplified
+def simplifyFracEx():
+    ex = polynomialEx()
+    return sympy.latex(sympy.UnevaluatedExpr(sympy.simplify(ex * polynomialEx()) / sympy.simplify(ex * polynomialEx())))
+
+
 ############################### END ###############################
 
 ############################### TOPIC 6: EQUATIONS WITH FRACTIONS ###############################
@@ -159,36 +189,38 @@ def trigRoot():
     k = random.randrange(7)
     if k < 3:
         return 0
-    if k == 3:
+    elif k == 3:
         return sign(sympy.Rational(1,2))
-    if k == 4:
+    elif k == 4:
         return sign(sympy.sqrt(2)/2)
-    if k == 5:
+    elif k == 5:
         return sign(sympy.sqrt(3)/2)
-    if k == 6:
+    elif k == 6:
         return sign(1)
 
 # typical radian value generator
 def trigValue():
     k = random.randrange(5)
-    if k == 0:
-        return 0
-    if k == 1:
-        return sign(sympy.pi)/2
-    if k == 2:
-        return sign(sympy.pi)/3
-    if k == 3:
-        return sign(sympy.pi)/4
-    if k == 4:
-        return sign(sympy.pi)/6
+    match k:
+        case 0:
+            return 0
+        case 1:
+            return sign(sympy.pi)/2
+        case 2:
+            return sign(sympy.pi)/3
+        case 3:
+            return sign(sympy.pi)/4
+        case 4:
+            return sign(sympy.pi)/6
 
 # pick a trig function between sin and cos
 def trigSinCos(y):
     k = random.randrange(2)
-    if k == 0:
-        return sympy.sin(y)
-    else:
-        return sympy.cos(y)
+    match k:
+        case 0:
+            return sympy.sin(y)
+        case 1:
+            return sympy.cos(y)
 
 # generate a sin or cos function with deformations
 def trigFunc():  
@@ -232,10 +264,11 @@ def trigSubs():
 # randomly pick a type of trig equation
 def trigEqMix():
     k = random.randrange(3)
-    if k == 0:
-        return basicTrigEq()
-    if k == 1:
-        return trigSubs()
-    if k ==2:
-        return trigEq()
+    match k:
+        case 0:
+            return basicTrigEq()
+        case 1:
+            return trigSubs()
+        case 2:
+            return trigEq()
 ############################### END ###############################
